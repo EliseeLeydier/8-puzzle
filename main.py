@@ -1,7 +1,5 @@
 import copy
 
-from pygame import init
-
 def calculateManhattan(initial):
     initial_config = initial
     manDict = 0

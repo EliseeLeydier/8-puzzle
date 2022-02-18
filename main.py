@@ -1,5 +1,8 @@
 import copy
 
+def echanger(a , b):
+    return (b,a)
+
 def calculateManhattan(initial):
     initial_config = initial
     manDict = 0
@@ -22,20 +25,20 @@ def afficherBien(liste):
         print('|', liste[i], end = "")
     print('|')
 
-dic = {1 : [+0, +0, +1, +3],
-       2 : [+0, -1, +1, +3],
-       3 : [+0, -1, +0, +3],
-       4 : [-3, +0, +1, +3],
-       5 : [-3, -1, +1, +3],
-       6 : [-3, -1, +0, +3],
-       7 : [-3, +0, +1, +0],
-       8 : [-3, -1, +1, +0],
-       9 : [-3, -1, +0, +0]}
+dic = {0 : [False, False, +1, +3],
+       1 : [False, -1, +1, +3],
+       2 : [False, -1, False, +3],
+       3 : [-3, False, +1, +3],
+       4 : [-3, -1, +1, +3],
+       5 : [-3, -1, False, +3],
+       6 : [-3, False, +1, False],
+       7 : [-3, -1, +1, False],
+       8 : [-3, -1, False, False]}
 
 initial = [8,1,3,4,0,2,7,6,5]
 vus = []
 
-for i in range(15):
+for i in range(20):
 #while(calculateManhattan(initial) > 0):
 
     vus.append(copy.deepcopy(initial))
@@ -49,34 +52,29 @@ for i in range(15):
             index = i
 
     liste = dic[index]
+    #print(listePlateau)
 
     for i in range(1, 5):
         j = i-1
-        #print(listePlateau[i])
-        listePlateau[i][index],listePlateau[i][index+(liste[j])] = listePlateau[i][index+(liste[j])],listePlateau[i][index]
-        #print(listePlateau[i])
-        #print()
-
-    # print("--1--")
-    # print(listePlateau[0])
-    # print("--2--")
-    # print(listePlateau[1])
-    # print("--3--")
-    # print(listePlateau[2])
-    # print("--4--")
-    # print(listePlateau[3])
-    # print("--5--")
-    # print(listePlateau[4])
+        if liste:
+            #print(listePlateau[i], "     ", index)
+            #print(listePlateau[i][index+(liste[j])])
+            listePlateau[i][index],listePlateau[i][index+(liste[j])] = echanger(listePlateau[i][index], listePlateau[i][index+(liste[j])])
+        else:
+            listePlateau[i] = False
 
 
-    #print(calculateManhattan(listePlateau[0]))
-    #print(calculateManhattan(listePlateau[1]))
-    #print(calculateManhattan(listePlateau[2]))
-    #print(calculateManhattan(listePlateau[3]))
-    #print(calculateManhattan(listePlateau[4]))
 
-    min = listePlateau[1]
-    for i in range(2,5):
-        if (min > listePlateau[i] and (listePlateau[i] not in vus)):
-            min = listePlateau[i]
-    initial = min
+    min = 100
+    for i in range(1,5):
+        #print("min:", min, "listePlateau[i] : ", listePlateau[i])
+        if (min > calculateManhattan(listePlateau[i]) and (listePlateau[i] not in vus) and listePlateau[i] != False):
+            min = calculateManhattan(listePlateau[i])
+            initial = listePlateau[i]
+    #print("initial : ", initial)
+
+
+    print("------------------------------")
+    afficherBien(initial)
+    print("Manhattan : ", calculateManhattan(initial))
+    print("------------------------------")

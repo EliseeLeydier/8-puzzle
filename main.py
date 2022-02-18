@@ -24,11 +24,23 @@ def afficherBien(liste):
         print('|', liste[i], end = "")
     print('|')
 
+dic = {1 : [+0, +0, +1, +3],
+       2 : [+0, -1, +1, +3],
+       3 : [+0, -1, +0, +3],
+       4 : [-3, +0, +1, +3],
+       5 : [-3, -1, +1, +3],
+       6 : [-3, -1, +0, +3],
+       7 : [-3, +0, +1, +0],
+       8 : [-3, -1, +1, +0],
+       9 : [-3, -1, +0, +0]}
+
 initial = [8,1,3,4,0,2,7,6,5]
+vus = []
 
 for i in range(15):
 #while(calculateManhattan(initial) > 0):
 
+    vus.append(copy.deepcopy(initial))
     afficherBien(initial)
     print()
 
@@ -38,7 +50,7 @@ for i in range(15):
         if initial[i] == 0:
             index = i
 
-    liste = [-3, -1, +1, +3]
+    liste = dic[index]
 
     for i in range(1, 5):
         j = i-1
@@ -67,6 +79,6 @@ for i in range(15):
 
     min = listePlateau[1]
     for i in range(2,5):
-        if (min > listePlateau[i]):
+        if (min > listePlateau[i] and (listePlateau[i] not in vus)):
             min = listePlateau[i]
     initial = min

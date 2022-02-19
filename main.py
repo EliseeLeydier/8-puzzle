@@ -17,19 +17,18 @@ class etat:
                 manDict += abs(prev_row-goal_row) + abs(prev_col - goal_col)
         return manDict
 
-    def afficher(self):
+    def afficher(self, plateau):
         
-        for i in range(len(self.initial)):
+        for i in range(len(plateau)):
             if i%3 == 0 and i != 0:
                 print('|')
-            print('|', self.initial[i], end = "")
+            print('|', plateau[i], end = "")
         print('|')
     
     def estResolu(self):
         return self.initial == self.goal
 
     def enfants(self, plateau):
-        print("sortir")
         dic = {0 : [False, False, +1, +3],
             1 : [False, -1, +1, +3],
             2 : [False, -1, False, +3],
@@ -55,31 +54,38 @@ class etat:
 
     def A(self):
         vus = []
+        compteur = 0
         queue = PriorityQueue()
         manhattan = self.calculateManhattan(self.initial)
-        queue.put((manhattan, self.initial))
+        queue.put((manhattan, compteur, self.initial))
 
         while not queue.empty():
-            neud = queue.get()[1]
+
+
+            if compteur > 14:
+                return
+            neud = queue.get()[2]
             vus.append(neud)
+            #self.afficher(neud)
+            print(neud)
+            print()
 
             if (self.estResolu()):
                 return(neud)
                 
-
-            print(enfantsF(neud))
             listeEnfant = self.enfants(neud)
-            print(neud)
+            
             for enfant in listeEnfant:
-                print(enfant)
+                #print(enfant)
                 if enfant not in vus:
+                    compteur += 1
                     manhattan = self.calculateManhattan(enfant)
-                    queue.put((manhattan, self.initial))
+                    queue.put((manhattan, compteur, enfant))
 
 
 
-plateauDepart = etat([8, 1, 3, 4, 0, 2, 7, 6, 5], 0)
+plateauDepart = etat([1,8,2,0,4,3,7,6,5], 0)
 #print(plateauDepart.calculateManhattan())
 print(type(plateauDepart.initial))
-plateauDepart.afficher()
 plateauDepart.A()
+

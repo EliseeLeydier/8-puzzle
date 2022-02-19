@@ -1,33 +1,6 @@
 from queue import PriorityQueue
 import copy
 
-def enfantsF(plateau):
-    print("sortir")
-    dic = {0 : [False, False, +1, +3],
-        1 : [False, -1, +1, +3],
-        2 : [False, -1, False, +3],
-        3 : [-3, False, +1, +3],
-        4 : [-3, -1, +1, +3],
-        5 : [-3, -1, False, +3],
-        6 : [-3, False, +1, False],
-        7 : [-3, -1, +1, False],
-        8 : [-3, -1, False, False]}
-
-    for i in range(len(plateau)):
-            if plateau[i] == 0:
-                index = i
-
-    listeEnfants = []
-    for i in range(1, 5):
-        j = i-1
-        if dic[index]:
-            plateau2 = copy.deepcopy(plateau)
-            plateau2[index],plateau2[index+(dic[index][j])] = plateau2[index+(dic[index][j])],plateau2[index]
-        listeEnfants.append(plateau2)
-    return listeEnfants
-
-
-
 class etat:
 
     def __init__ (self, initial, profondeur ):

@@ -1,12 +1,22 @@
-from queue import PriorityQueue
 import copy
+
+def minim(listeEtat):
+    minimum = listeEtat[0][0]
+    indexe = 0
+    for i in range(len(listeEtat)):
+        manath = listeEtat[i][0]
+        plateau = listeEtat[i][1]
+        if (minimum > manath):
+            minimum = manath
+            indexe = 1
+    return listeEtat[indexe]
 
 class etat:
 
     def __init__ (self, initial, profondeur ):
         self.initial = initial
         self.profondeur = profondeur
-        self.goal = [0,1,2,3,4,5,6,7,8]
+        self.goal = [1,2,3,4,5,6,7,8,0]
     
     def calculateManhattan(self, plateau):
         manDict = 0
@@ -55,19 +65,22 @@ class etat:
     def A(self):
         vus = []
         compteur = 0
-        queue = PriorityQueue()
         manhattan = self.calculateManhattan(self.initial)
-        queue.put((manhattan, compteur, self.initial))
+        queue = []
+        queue.append((manhattan, self.initial))
+        #print("manathan")
 
-        while not queue.empty():
+        while True:
 
 
-            if compteur > 14:
+            if compteur > 10:
                 return
-            neud = queue.get()[2]
+            #print(queue)
+            neud = minim(queue)
+            print(neud)
+            neud = neud[1]
             vus.append(neud)
             #self.afficher(neud)
-            print(neud)
             print()
 
             if (self.estResolu()):
@@ -75,12 +88,13 @@ class etat:
                 
             listeEnfant = self.enfants(neud)
             
+            queue = []
             for enfant in listeEnfant:
                 #print(enfant)
                 if enfant not in vus:
                     compteur += 1
                     manhattan = self.calculateManhattan(enfant)
-                    queue.put((manhattan, compteur, enfant))
+                    queue.append((manhattan, enfant))
 
 
 
@@ -89,3 +103,30 @@ plateauDepart = etat([1,8,2,0,4,3,7,6,5], 0)
 print(type(plateauDepart.initial))
 plateauDepart.A()
 
+
+def AStar_search(given_state , n):
+    frontier = PriorityQueue()
+    explored = []
+    counter = 0
+    root = State(given_state, None, None, 0, 0)
+    evaluation = root.Manhattan_Distance(n) #we can use Misplaced_Tiles() instead.
+    frontier.put((evaluation[1], counter, root)) #based on A* evaluation
+
+    while not frontier.empty():
+        current_node = frontier.get()
+        print()
+        print(current_node[2].state)
+        current_node = current_node[2]
+        explored.append(current_node.state)
+        
+        if current_node.test():
+            return current_node.solution(), len(explored)
+
+        children = current_node.expand(n)
+        for child in children:
+            print(child.state)
+            if child.state not in explored:
+                counter += 1
+                evaluation = child.Manhattan_Distance(n) #we can use Misplaced_Tiles() instead.
+                frontier.put((evaluation[1], counter, child)) #based on A* evaluation
+    return
